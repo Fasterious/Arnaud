@@ -7,6 +7,9 @@ Plus récent en haut.
 
 ## 2026-05-17
 
+- L2 · `site/01-loupe.html` · Projection du case study Loupe (création initiale, miroir du L1, même feuille de style que `00-genese.html`)
+- L1 · `vault/fr/01-loupe/loupe-case-study.md` · Promotion L0→L1 — premier case study Loupe (ingest dictée vocale + exploration repo externe `/Users/arnaud/Projects/Loupe`)
+- L0 · `_inbox/01-loupe/2026-05-17-conversation-avion-case-study.md` · Ingestion de la dictée vocale (vol, premier case study Loupe)
 - L2 · `site/00-genese.html` · Intégration des amendements V2 dans la projection HTML (Partie II)
 - L2 · `site/00-genese.html` · Ajout du footer de traçabilité (Provenance)
 - L1 · `vault/fr/00-genese/methode-workflow.md` · Création du manuel de méthode (workflow L0→L1→L2)

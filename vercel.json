@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/site/00-genese.html" },
-    { "source": "/00-genese", "destination": "/site/00-genese.html" }
+    { "source": "/",          "destination": "/site/index.html"    },
+    { "source": "/00-genese", "destination": "/site/00-genese.html" },
+    { "source": "/01-loupe",  "destination": "/site/01-loupe.html"  }
   ]
 }

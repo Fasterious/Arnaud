@@ -192,9 +192,30 @@
     ul.compact li { margin: 0.25rem 0; }
     .row-info { background: rgba(59, 130, 246, 0.12) !important; }
     .row-warn { background: rgba(234, 179, 8, 0.14) !important; }
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+    }
+    .site-nav .brand { font-weight: 650; color: var(--text); margin-right: auto; text-decoration: none; }
+    .site-nav a.nav-link { color: var(--muted); text-decoration: none; }
+    .site-nav a.nav-link:hover { color: var(--text); }
+    .site-nav a.nav-link.active { color: var(--accent); font-weight: 600; }
   </style>
 </head>
 <body>
+  <nav class="site-nav">
+    <a href="/" class="brand">Système narratif</a>
+    <a href="/00-genese" class="nav-link active">00 — Genèse</a>
+    <a href="/01-loupe" class="nav-link">01 — Loupe</a>
+  </nav>
   <div class="wrap">
     <h1>Projet « Arnaud » — Synthèse stratégique</h1>
     <p class="lead">
