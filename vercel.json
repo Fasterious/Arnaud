@@ -1,3 +1,6 @@
 {
-  "rewrites": [{ "source": "/", "destination": "/synthese-projet-arnaud.html" }]
+  "rewrites": [
+    { "source": "/", "destination": "/site/00-genese.html" },
+    { "source": "/00-genese", "destination": "/site/00-genese.html" }
+  ]
 }
