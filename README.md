@@ -58,6 +58,18 @@ Préfixe `NN-` pour ordonner :
 Le détail méthodologique (cible : 90 min par case study) est dans la
 [§ 8 de la synthèse](./vault/fr/00-genese/synthese-strategique.md#8-méthodologie-de-travail-au-quotidien).
 
+## Méthode & contrôle de la propagation
+
+L'IA ne propage **jamais** une couche à la suivante sans validation explicite.
+
+- Manuel complet (humain) : [`vault/fr/00-genese/methode-workflow.md`](./vault/fr/00-genese/methode-workflow.md)
+- Règle Cursor (auto-appliquée à chaque session) : [`.cursor/rules/00-workflow-layers.mdc`](./.cursor/rules/00-workflow-layers.mdc)
+- Historique humain des transitions : [`CHANGELOG.md`](./CHANGELOG.md)
+
+Les 4 cérémonies (Capture, Promotion L0→L1, Projection L1→L2, Nouvelle
+version), les checkpoints anti-perfectionnisme et le frontmatter obligatoire
+sont décrits dans le manuel.
+
 ## Stack cible
 
 - **Framework futur** : Next.js 15 (App Router) — bascule prévue après 2-3

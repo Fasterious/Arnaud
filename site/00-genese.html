@@ -201,6 +201,14 @@
       Analyse croisée des 3 IA, lecture critique et approche unifiée. Le projet n’est pas seulement un site :
       c’est un <strong>système de compression narrative</strong> qui se manifeste sous forme de site.
     </p>
+    <div class="callout info" style="margin-bottom:1.5rem">
+      <span class="t">Document à deux versions</span>
+      <p style="margin:0">
+        <strong>Partie I (§1–§9)</strong> : PRD V1 (référence).
+        <strong>Partie II (§A–§H)</strong> : amendements V2 — forcing functions, méthode de résultats, templates secondaires, cadrage par audience, anti-bullshit, wireframes, checklist, micro-actions.
+        Plus une section <strong>Méta</strong> sur le workflow lui-même.
+      </p>
+    </div>
 
     <div class="stats">
       <div class="stat"><div class="v">3</div><div class="l">Projets imbriqués</div></div>
@@ -210,7 +218,7 @@
     </div>
 
     <nav class="toc" aria-label="Sommaire">
-      <strong>Sommaire</strong>
+      <strong>Partie I — PRD V1</strong>
       <ol>
         <li><a href="#s1">Diagnostic</a></li>
         <li><a href="#s2">Ce que disent les 3 IA</a></li>
@@ -221,6 +229,22 @@
         <li><a href="#s7">Track parallèle</a></li>
         <li><a href="#s8">Méthodologie</a></li>
         <li><a href="#s9">Actions cette semaine</a></li>
+      </ol>
+      <strong style="display:block;margin-top:0.75rem">Partie II — V2 amendements</strong>
+      <ol style="list-style-type: upper-alpha">
+        <li><a href="#sA">Métriques hebdomadaires (forcing functions)</a></li>
+        <li><a href="#sB">Reconstruire des métriques absentes</a></li>
+        <li><a href="#sC">Templates secondaires (note, skill, réflexion, vision)</a></li>
+        <li><a href="#sD">Cadrage par audience — exemples concrets</a></li>
+        <li><a href="#sE">« Ce que ça dit de moi » — méthode anti-bullshit</a></li>
+        <li><a href="#sF">Wireframes ASCII des 5 pages V1</a></li>
+        <li><a href="#sG">Checklist d’auto-revue avant déploiement</a></li>
+        <li><a href="#sH">Si je n’ai que 30 minutes aujourd’hui</a></li>
+      </ol>
+      <strong style="display:block;margin-top:0.75rem">Méta</strong>
+      <ol style="list-style-type: lower-roman">
+        <li><a href="#smeta">Workflow couche par couche</a></li>
+        <li><a href="#sprov">Provenance</a></li>
       </ol>
     </nav>
 
@@ -609,7 +633,250 @@ translation_reviewed: false
     </div>
 
     <hr />
-    <p class="muted" style="font-size:0.85rem">Document exporté depuis la synthèse Cursor Canvas — ouvrir ce fichier dans un navigateur (double-clic).</p>
+
+    <!-- ============================================================= -->
+    <!-- PARTIE II — V2 AMENDEMENTS                                    -->
+    <!-- ============================================================= -->
+    <h1 style="margin-top:2rem">Partie II — V2 amendements</h1>
+    <p class="lead">
+      Cette partie <strong>n’écrase pas</strong> la V1 : elle l’enrichit sur 8 angles
+      laissés en blanc ou seulement effleurés. Les sections sont notées §A à §H.
+    </p>
+
+    <h2 id="sA">§A — Métriques hebdomadaires (forcing functions)</h2>
+    <p>V1 ne donne qu’<em>une seule</em> métrique finale (6 semaines). Insuffisant pour piloter au quotidien.</p>
+    <table>
+      <thead><tr><th>Vendredi soir</th><th>Indicateur binaire</th><th>Si non → action</th></tr></thead>
+      <tbody>
+        <tr><td>S+1</td><td>Template figé + 1 case study v1 dans <code>vault/</code></td><td>Réserver 2 h samedi</td></tr>
+        <tr><td>S+2</td><td>Site déployé avec 3 case studies FR</td><td>Couper une fonctionnalité, pas un case study</td></tr>
+        <tr><td>S+3</td><td>Script traduction tourne sur 1 fichier</td><td>Limiter à 1 provider, pas comparer</td></tr>
+        <tr><td>S+4</td><td>EN relu + mock interview programmée</td><td>Mock non-négociable</td></tr>
+        <tr><td>S+5</td><td>2 min STAR mémorisée par case study</td><td>Audio en boucle</td></tr>
+        <tr><td>S+6</td><td>Rétro complète + décision V2 actée</td><td>Documenter dans <code>vault/fr/00-genese/retro-s6.md</code></td></tr>
+      </tbody>
+    </table>
+    <p><strong>Dérive</strong> : 2 vendredis ratés d’affilée → pause des nouvelles features, rattrapage. Jamais l’inverse.</p>
+
+    <h2 id="sB">§B — Reconstruire des métriques absentes</h2>
+    <p>Principal blocage à l’écriture des case studies : la peur de ne pas avoir de résultats chiffrés.</p>
+    <h3>Hiérarchie des preuves (du plus dur au plus mou)</h3>
+    <ol>
+      <li><strong>Chiffre direct</strong> — conversion, NPS, temps, taux d’erreur, €.</li>
+      <li><strong>Chiffre indirect</strong> — décision prise grâce au livrable, adoption.</li>
+      <li><strong>Témoignage attribué</strong> — citation exacte d’un PM, sponsor, utilisateur.</li>
+      <li><strong>Comparaison avant/après qualitative</strong> — bascule observable.</li>
+      <li><strong>Ce qui <em>n’est pas arrivé</em></strong> — produit non lancé grâce à une recherche, économies évitées.</li>
+    </ol>
+    <p><strong>Règle</strong> : si aucune des 5 ne s’applique, ce n’est probablement pas un case study mais une note.</p>
+    <h3>Patron quand le résultat est faible</h3>
+    <pre>La recommandation a été [livrée / publiée / présentée à X].
+Elle a été [utilisée / archivée / partiellement reprise] dans [contexte].
+À recul, ce que j'en retire de plus utile est [leçon / pattern].</pre>
+
+    <h2 id="sC">§C — Templates secondaires</h2>
+    <p>V1 ne donne que le template <em>case study</em>. Il en manque 4 pour couvrir tout le vault.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h4><code>_inbox/&lt;projet&gt;/_template-note-libre.md</code></h4>
+        <div class="body"><p style="margin:0">Frontmatter minimal : <code>type: note</code>, <code>project</code>, <code>source</code>, <code>status: brut</code>. Aucune section imposée.</p></div>
+      </div>
+      <div class="card">
+        <h4><code>vault/fr/skills/_template-skill.md</code></h4>
+        <div class="body"><p style="margin:0">Champs : <code>category</code>, <code>level</code>, <code>evidence_count</code>. Sections : Définition · Acquisition · Preuves · Ce que je sais ne PAS faire.</p></div>
+      </div>
+      <div class="card">
+        <h4><code>vault/fr/reflexions/_template-reflexion.md</code></h4>
+        <div class="body"><p style="margin:0">Champs : <code>themes</code>, <code>maturity</code>. Sections : Question · Mon hypothèse · Ce qui me ferait changer d’avis.</p></div>
+      </div>
+      <div class="card">
+        <h4><code>vault/fr/visions/_template-vision.md</code></h4>
+        <div class="body"><p style="margin:0">Champs : <code>horizon</code>, <code>confidence</code>. Sections : Ce que je crois · Fondements · Implications.</p></div>
+      </div>
+    </div>
+
+    <h2 id="sD">§D — Cadrage par audience : exemples concrets</h2>
+    <p>V1 dit « URLs curées plutôt que chatbot ». Voici comment, sans dupliquer le contenu.</p>
+    <p>Source : un seul case study dans <code>vault/fr/work/</code>, tags <code>[ux-research, design, ai-prototyping]</code>.</p>
+    <table>
+      <thead><tr><th>Audience</th><th>Route</th><th>Sections en avant</th><th>Masquées</th></tr></thead>
+      <tbody>
+        <tr><td>Recruteur Product Design</td><td><code>/for-product-design/...</code></td><td>Problème, Action, Résultat</td><td>Méthodo recherche</td></tr>
+        <tr><td>Recruteur UX Research</td><td><code>/for-research/...</code></td><td>Problème, Méthodo, Résultats qualitatifs, Leçon</td><td>Détails prototypage</td></tr>
+        <tr><td>Pair IA / Indé</td><td><code>/playground/...</code></td><td>Comment l’IA a été utilisée, Ressources</td><td>Contexte business</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Implémentation</strong> : un seul Markdown, paramètre <code>audience</code> dans la route Next.js, champ <code>audiences:</code> dans le frontmatter. Coût ≈ 1 h par case study + 2 jours d’impl. au sprint 1.</p>
+
+    <h2 id="sE">§E — « Ce que ça dit de moi » : méthode anti-bullshit</h2>
+    <p>Section la plus difficile du template. Protocole en 3 questions à se poser dans l’ordre :</p>
+    <ol>
+      <li><strong>Quel choix particulier as-tu fait qu’un autre n’aurait pas fait ?</strong> Pas « j’ai mené des interviews » ; mais « j’ai arrêté à 5 alors qu’on m’en demandait 12, parce que… ».</li>
+      <li><strong>Qu’est-ce que ça révèle d’une croyance que tu portes ?</strong> Pas « je suis pragmatique » ; mais « je crois que matérialiser tôt produit plus d’apprentissage que documenter exhaustivement » — testable, donc crédible.</li>
+      <li><strong>Lien explicite à un mantra (Création OU Collaboration).</strong></li>
+    </ol>
+    <h3>Format final (5 lignes max)</h3>
+    <pre># Ce que ça dit de moi
+Ce projet a été un cas typique de [tension récurrente].
+J'ai tranché en [choix concret], en assumant [risque].
+Ce choix incarne ma croyance que [conviction testable].
+C'est aligné avec le mantra **[Création OU Collaboration]** parce que [lien d'une ligne].</pre>
+    <p class="muted">Si tu n’arrives pas à remplir ce gabarit, le case study n’est pas mûr pour être publié.</p>
+
+    <h2 id="sF">§F — Wireframes ASCII des 5 pages V1</h2>
+    <p>Pas de design pour le design. Discipline graphique : 2 niveaux typographiques max, 1 accent, aucune ombre, aucun dégradé.</p>
+    <h3>Home <code>/</code></h3>
+    <pre>┌──────────────────────────────────────────────────┐
+│  ARNAUD                              FR | EN     │
+├──────────────────────────────────────────────────┤
+│                                                  │
+│  AI-augmented Product Designer / Researcher      │
+│  Création + Collaboration                        │
+│                                                  │
+│  [ One-liner : ce que je fais, pour qui ]        │
+│                                                  │
+├──────────────────────────────────────────────────┤
+│  3 RÉCENTS                                       │
+│  · 2026 — Case study A          → lire           │
+│  · 2025 — Case study B          → lire           │
+│  · 2024 — Case study C          → lire           │
+│  Voir tout (12) →                                │
+└──────────────────────────────────────────────────┘</pre>
+    <h3>Case study <code>/work/[slug]</code></h3>
+    <pre>┌──────────────────────────────────────────────────┐
+│  ← Work                            [share link]  │
+├──────────────────────────────────────────────────┤
+│  TITRE                                           │
+│  Entreprise · Rôle · Année                       │
+│  Impact summary (1 phrase)                       │
+│                                                  │
+│  ## Contexte                                     │
+│  ## Problème                                     │
+│  ## Ce que j’ai fait                             │
+│  ## Résultat                                     │
+│  ## Ce que j’en retire                           │
+│  ## Ce que ça dit de moi                         │
+└──────────────────────────────────────────────────┘</pre>
+    <p class="muted">Wireframes complets (About, Work liste, CV) dans <code>vault/fr/00-genese/synthese-strategique-v2.md</code>.</p>
+
+    <h2 id="sG">§G — Checklist d’auto-revue avant chaque déploiement</h2>
+    <pre>┌─ CONTENU ─────────────────────────────────────────┐
+│ □ Chaque case study a un impact_summary chiffré   │
+│   OU témoignage attribué, OU comparaison          │
+│   avant/après explicite                           │
+│ □ La section "Ce que ça dit de moi" applique le   │
+│   protocole §E (pas de banalité)                  │
+│ □ Aucune section vide ; sinon, supprimer          │
+├─ FORME ───────────────────────────────────────────┤
+│ □ Pas de "TODO", pas de "[à compléter]"           │
+│ □ Une page = un message principal                 │
+│ □ Mobile testé sur téléphone, pas seulement       │
+│   en dev tools                                    │
+├─ AUDIENCE ────────────────────────────────────────┤
+│ □ Home lue en 90 s : le recruteur sait ce que     │
+│   je fais ?                                       │
+│ □ Case study cliqué : la valeur est claire        │
+│   en 30 s ?                                       │
+└───────────────────────────────────────────────────┘</pre>
+    <p><strong>Si une case n’est pas cochée, on ne déploie pas.</strong></p>
+
+    <h2 id="sH">§H — Si je n’ai que 30 minutes aujourd’hui</h2>
+    <p>Micro-actions classées par ROI temps. À utiliser les jours faibles.</p>
+    <table>
+      <thead><tr><th>Action</th><th>Effort</th><th>Valeur</th><th>Pourquoi</th></tr></thead>
+      <tbody>
+        <tr><td>Capturer une note vocale brute dans <code>_inbox/</code></td><td>5 min</td><td>★★★</td><td>Aucune perte. Matériel pour jours énergiques.</td></tr>
+        <tr><td>Améliorer l’<code>impact_summary</code> d’un case study</td><td>15 min</td><td>★★★</td><td>1 ligne qui change la perception du case entier.</td></tr>
+        <tr><td>Mémoriser la version 2 min STAR d’un case study</td><td>30 min</td><td>★★★</td><td>Ce qui sert le plus en entretien.</td></tr>
+        <tr><td>Cocher 1 case dans la checklist §G</td><td>10 min</td><td>★★</td><td>Pile de retards qui décourage si elle grossit.</td></tr>
+        <tr><td>Lire 1 case study à voix haute en anglais</td><td>20 min</td><td>★★</td><td>Compense les jours sans mock.</td></tr>
+        <tr><td>Rétro vendredi de la semaine passée</td><td>15 min</td><td>★</td><td>Mémoire institutionnelle.</td></tr>
+      </tbody>
+    </table>
+    <p class="muted"><strong>À NE PAS faire en 30 min</strong> : ouvrir un nouveau case study, toucher au design, lire de la doc Next.js.</p>
+
+    <hr />
+
+    <!-- ============================================================= -->
+    <!-- MÉTA — WORKFLOW                                                -->
+    <!-- ============================================================= -->
+    <h1 id="smeta" style="margin-top:2rem">Méta — Workflow couche par couche</h1>
+    <p class="lead">
+      Le système se prouve par son existence : ce document est lui-même produit selon la méthode qu’il décrit.
+    </p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h4>L0 — Inbox <span class="pill">privé</span></h4>
+        <div class="body">
+          <p class="muted" style="margin-top:0">Dumps vocaux, idées jetables</p>
+          <p style="margin-bottom:0"><code>_inbox/&lt;projet&gt;/</code>. Aucune contrainte. Gitignored.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h4>L1 — Vault <span class="pill">moteur</span></h4>
+        <div class="body">
+          <p class="muted" style="margin-top:0">Markdown discipliné</p>
+          <p style="margin-bottom:0"><code>vault/fr/&lt;projet&gt;/</code>. Frontmatter obligatoire. Versionné.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h4>L2 — Site <span class="pill">public</span></h4>
+        <div class="body">
+          <p class="muted" style="margin-top:0">Projection curée</p>
+          <p style="margin-bottom:0"><code>site/&lt;projet&gt;.html</code> aujourd’hui, <code>app/</code> Next.js plus tard.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Règle d’or — propagation contrôlée</h3>
+    <p>Une couche n’est jamais écrite sans <strong>validation explicite</strong> sur la précédente.</p>
+    <ul class="compact">
+      <li><strong>L0 → L1</strong> : l’IA propose un brouillon dans le chat, demande « OK pour écrire dans <code>vault/</code> ? ».</li>
+      <li><strong>L1 → L2</strong> : l’IA détecte le décalage, montre le diff conceptuel, demande confirmation avant d’écrire dans <code>site/</code>.</li>
+      <li><strong>Nouvelle version</strong> : jamais d’écrasement. Créer <code>&lt;slug&gt;-v2.md</code> avec <code>based_on:</code>.</li>
+    </ul>
+
+    <h3>Cohérence inter-couches</h3>
+    <ul class="compact">
+      <li>Chaque L1 déclare ses <code>sources:</code> (L0), son <code>based_on:</code> (L1 précédent), son <code>preview:</code> (L2).</li>
+      <li>Chaque L2 affiche un footer <strong>Provenance</strong> (ci-dessous).</li>
+      <li>Le fichier racine <code>CHANGELOG.md</code> log toutes les transitions L0→L1 et L1→L2.</li>
+    </ul>
+
+    <h3>Contrôle utilisateur</h3>
+    <p>L’IA n’a jamais le droit, sans demander :</p>
+    <ul class="compact">
+      <li>d’écraser un <code>.md</code> existant dans <code>vault/</code> ;</li>
+      <li>de modifier un <code>site/*.html</code> sans avoir d’abord montré le diff conceptuel ;</li>
+      <li>de créer un nouveau projet sans valider le nom avec toi ;</li>
+      <li>de retirer une entrée du <code>backlog.md</code>.</li>
+    </ul>
+
+    <p class="muted">
+      Manuel complet : <code>vault/fr/00-genese/methode-workflow.md</code> ·
+      Règle Cursor : <code>.cursor/rules/00-workflow-layers.mdc</code>
+    </p>
+
+    <hr />
+
+    <!-- ============================================================= -->
+    <!-- PROVENANCE                                                     -->
+    <!-- ============================================================= -->
+    <h2 id="sprov" style="margin-top:1.5rem">Provenance</h2>
+    <p class="muted">Ce document HTML est une projection (L2) de fichiers Markdown du vault (L1).</p>
+    <table>
+      <thead><tr><th>Type</th><th>Source</th><th>Rôle</th></tr></thead>
+      <tbody>
+        <tr><td>L0</td><td><code>_inbox/00-genese/conversation-3-ias.md</code></td><td>Matière brute (privée, gitignored)</td></tr>
+        <tr><td>L1</td><td><code>vault/fr/00-genese/synthese-strategique.md</code></td><td>PRD V1 → Partie I (§1–§9)</td></tr>
+        <tr><td>L1</td><td><code>vault/fr/00-genese/synthese-strategique-v2.md</code></td><td>PRD V2 amendements → Partie II (§A–§H)</td></tr>
+        <tr><td>L1</td><td><code>vault/fr/00-genese/methode-workflow.md</code></td><td>Manuel du workflow → Méta</td></tr>
+        <tr><td>Règle</td><td><code>.cursor/rules/00-workflow-layers.mdc</code></td><td>Miroir compact du manuel, lu par l’IA à chaque session</td></tr>
+        <tr><td>Trace</td><td><code>CHANGELOG.md</code></td><td>Historique humain des transitions entre couches</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="font-size:0.85rem">Projection générée le 2026-05-17. Pour régénérer : demander à l’IA « mets à jour <code>site/00-genese.html</code> ».</p>
   </div>
 </body>
 </html>
