@@ -30,8 +30,6 @@ a:hover { text-decoration: underline; }
 
 /* ---------- Shell ---------- */
 .shell {
-  display: grid;
-  grid-template-columns: var(--sidebar-w) 1fr;
   min-height: 100vh;
 }
 
@@ -39,11 +37,57 @@ a:hover { text-decoration: underline; }
   background: var(--surface);
   border-right: 1px solid var(--border);
   padding: 16px 12px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: var(--sidebar-w);
+  max-width: 85vw;
   height: 100vh;
   overflow-y: auto;
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 0.22s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 }
+.sidebar.open {
+  transform: translateX(0);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.15);
+}
+
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  z-index: 40;
+  animation: fade-in 0.2s ease;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  padding: 0 7px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-toggle:hover { background: var(--surface-2); }
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  border-radius: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
 .sidebar h1 {
   font-size: 14px;
@@ -138,7 +182,7 @@ a:hover { text-decoration: underline; }
 }
 .tree .node:hover { background: var(--surface-2); }
 .tree .node.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
-.tree .node .chev { width: 12px; opacity: 0.5; font-size: 10px; }
+.tree .node .chev { width: 12px; opacity: 0.5; font-size: 10px; flex-shrink: 0; }
 .tree .node .icon { font-size: 11px; opacity: 0.6; }
 .tree .node .label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tree .node .vis {
@@ -286,10 +330,8 @@ a:hover { text-decoration: underline; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 720px) {
-  .shell { grid-template-columns: 1fr; }
-  .sidebar { position: relative; height: auto; max-height: 40vh; }
   .content { padding: 20px 16px 60px; }
-  .topbar { padding: 10px 16px; gap: 12px; flex-wrap: wrap; }
+  .topbar { padding: 10px 16px; gap: 10px; }
   .breadcrumb { min-width: 0; flex: 1; }
   .auth-bar { flex-shrink: 0; }
   .article header.meta h1 { font-size: 26px; }

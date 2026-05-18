@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { TreeNode, FileNode, FolderNode, AuthLevel } from "@/lib/manifest";
@@ -13,15 +13,36 @@ interface Props {
 export function Shell({ tree, level, children }: Props) {
   const pathname = usePathname();
   const currentSlug = pathname === "/" ? "" : decodeURIComponent(pathname.slice(1));
+  const [navOpen, setNavOpen] = useState(false);
+
+  useEffect(() => {
+    setNavOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = navOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [navOpen]);
 
   return (
     <div className="shell">
-      <aside className="sidebar">
+      {navOpen && <div className="nav-backdrop" onClick={() => setNavOpen(false)} />}
+      <aside className={`sidebar ${navOpen ? "open" : ""}`}>
         <h1><Link href="/" style={{ color: "inherit" }}>Arnaud</Link></h1>
         <Tree nodes={tree} currentSlug={currentSlug} />
       </aside>
       <div className="main">
         <header className="topbar">
+          <button
+            className="nav-toggle"
+            onClick={() => setNavOpen((v) => !v)}
+            aria-label={navOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={navOpen}
+          >
+            <span /><span /><span />
+          </button>
           <Breadcrumb slug={currentSlug} tree={tree} />
           <AuthBar level={level} />
         </header>
@@ -50,7 +71,7 @@ function TreeFolder({ node, currentSlug }: { node: FolderNode; currentSlug: stri
   const [open, setOpen] = useState<boolean>(inPath);
   return (
     <li>
-      <div className="node" onClick={() => setOpen(!open)}>
+      <div className="node folder" onClick={() => setOpen(!open)} role="button" aria-expanded={open}>
         <span className="chev">{open ? "▾" : "▸"}</span>
         <span className="icon">▣</span>
         <span className="label">{node.label}</span>
