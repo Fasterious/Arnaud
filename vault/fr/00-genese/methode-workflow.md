@@ -1,231 +1,203 @@
 ---
-title: "Méthode — workflow couche par couche"
+title: "Méthode — workflow vault-first"
 project: 00-genese
 slug: methode-workflow
-date_start: 2026-05-17
+date_start: 2026-05-18
 type: meta-method
-category: process
 tags: [workflow, automation, control, traceability]
-skills_demonstrated:
-  - process-design
-  - human-in-the-loop
-  - traceability
 collaborators: [ia-meta-cursor]
-impact_summary: "Manuel opérationnel de la propagation L0→L1→L2 ; encadre l'IA et préserve le contrôle utilisateur."
-visibility: public
+impact_summary: "Manuel opérationnel de la propagation _inbox → vault, avec un shell Next.js qui projette automatiquement le markdown en site."
+visibility: editor
 status: active
 sources:
   - ../../../.cursor/rules/00-workflow-layers.mdc
-based_on: ./synthese-strategique.md
-preview: ../../../site/00-genese.html
+based_on: ./synthese-strategique-v2.md
 ---
 
-# Méthode — workflow couche par couche
+> **Refonte du 2026-05-18.** L'ancienne architecture L0→L1→L2 (avec génération HTML manuelle par projet) est remplacée par une architecture vault-first à 2 couches : tu écris du markdown, le shell Next.js le projette automatiquement.
 
-Ce document est **la source de vérité** pour la mécanique du système. La règle
-Cursor [`00-workflow-layers.mdc`](../../../.cursor/rules/00-workflow-layers.mdc)
-en est la version compacte injectée automatiquement à chaque session de l'IA.
-
-> **Pourquoi un manuel ET une règle ?** Le manuel est lisible par toi : tu peux
-> le challenger, l'amender, le faire évoluer. La règle est lue par l'IA à
-> chaque session. Quand le manuel change, la règle est mise à jour pour
-> rester un strict sous-ensemble.
+Source de vérité du workflow. La règle Cursor [`00-workflow-layers.mdc`](../../../.cursor/rules/00-workflow-layers.mdc) en est la version compacte injectée à chaque session IA.
 
 ---
 
-## 1. Les trois couches — rappel
+## 1. Pourquoi cette refonte
+
+L'ancien système avait une couche L2 — un fichier HTML par projet, généré à la main, avec CSS dupliqué. Ça consommait trop de tokens IA sur du code, alors que **la valeur est dans le markdown**. Trois projets pesaient déjà ~1565 lignes de HTML/CSS pour ~1209 lignes de contenu. Chaque nouveau projet doublait la dette.
+
+Renversement : **le markdown est le produit fini.** Un shell unique (Next.js) lit le vault, construit l'arborescence, rend chaque `.md` à la volée. Ajouter un projet = créer un dossier, déposer des `.md`, push. C'est tout.
+
+---
+
+## 2. Les 2 couches
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  L0  _inbox/<projet>/         AUDIENCE : toi seul      │
-│      ─────────────────                                 │
-│      Dumps vocaux, notes brutes, idées jetables.       │
-│      Gitignored. Coût d'entrée nul. Désordonné assumé. │
+│  _inbox/<NN-projet>/        AUDIENCE : toi seul        │
+│  ───────────────────                                   │
+│  Dumps vocaux, notes brutes. Gitignored. Désordre OK.  │
 └────────────────────────────────────────────────────────┘
-                       ↓  promotion = "tu valides ?"
+                       ↓  auto-génération (si frontmatter déductible)
 ┌────────────────────────────────────────────────────────┐
-│  L1  vault/fr/<projet>/       AUDIENCE : toi + IA      │
-│      ─────────────────                                 │
-│      Markdown discipliné, frontmatter obligatoire.     │
-│      Source de vérité du contenu. Versionné.           │
+│  vault/<locale>/<NN-projet>/  AUDIENCE : selon `visibility` │
+│  ──────────────────────────                            │
+│  Markdown discipliné + frontmatter.                    │
+│  PRODUIT FINI. Versionné via git.                      │
 └────────────────────────────────────────────────────────┘
-                       ↓  projection = "tu valides ?"
-┌────────────────────────────────────────────────────────┐
-│  L2  site/                    AUDIENCE : public        │
-│      ─────                                             │
-│      Projection curée. HTML aujourd'hui, Next.js bientôt│
-└────────────────────────────────────────────────────────┘
+                       ↓  projection automatique
+                  [shell Next.js — `app/`]
+                       ↓
+                   site naviguable
 ```
 
-Une transition entre couches est **toujours** un acte conscient validé par
-toi. L'IA n'a pas le droit d'écrire dans L1 ou L2 sans avoir reçu un OK
-explicite sur le brouillon ou le diff.
+Plus de cérémonie "L1 → L2" : la projection est automatique. Plus de dossier `old/` : git fait l'historique.
 
 ---
 
-## 2. Les 4 cérémonies du workflow
+## 3. Les 3 modes de visibilité
 
-### Cérémonie A — Capture (toi → L0)
+Trois niveaux côté visiteur, contrôlés par le frontmatter `visibility:` et la cookie d'auth :
 
-| Acteur | Toi |
-| --- | --- |
-| Trigger | Une idée, un projet, une réflexion à matérialiser |
-| Action | Dump vocal → transcription → fichier dans `_inbox/<projet>/<sujet>.md` |
-| Sortie | Un `.md` libre, pas de contrainte de format |
-| Validation IA | Aucune |
+| Mode | Niveau | Voit | Mot de passe |
+| --- | --- | --- | --- |
+| Public | 0 | `visibility: public` (défaut) | aucun |
+| Étendu | 1 | + `extended` | `EXTENDED_PASSWORD` |
+| Éditeur | 2 | + `editor` (méta, règles, skills) | `EDITOR_PASSWORD` |
 
-> L'IA n'intervient pas. C'est ton espace personnel. Aucun coût d'entrée.
+Le filtrage se fait **côté serveur** (page renvoie 404, arbre filtré). Pas de simple masquage UI. Repo GitHub privé = défense en profondeur : même qui aurait le code ne voit pas les fichiers `editor` sans le mot de passe.
 
-### Cérémonie B — Promotion L0 → L1
-
-| Acteur | Toi + IA en pong |
-| --- | --- |
-| Trigger | Tu demandes à l'IA "synthétise ce dump", "fais-en un case study", "produis le PRD" |
-| Action IA | 1. Lit `_inbox/<projet>/`. 2. Propose un brouillon dans le **chat** (pas dans `vault/`). 3. Affiche frontmatter + sections. 4. Demande "**OK pour écrire dans `vault/fr/<projet>/<slug>.md` ?**" |
-| Action toi | Tu valides, amendes, ou rejettes |
-| Sortie | Un `.md` dans `vault/` avec frontmatter complet (voir §4) |
-| Trace | 1 ligne dans `CHANGELOG.md` |
-
-### Cérémonie C — Projection L1 → L2
-
-| Acteur | Toi + IA en pong |
-| --- | --- |
-| Trigger | Tu demandes "mets à jour le site" OU l'IA détecte un décalage |
-| Action IA | 1. Compare `vault/fr/<projet>/` avec `site/<projet>.html`. 2. Liste dans le chat **les sections L1 ajoutées/modifiées** depuis la dernière projection. 3. Propose le plan d'intégration (ex. "nouvelle section §A en partie II"). 4. Demande "**OK pour mettre à jour `site/<projet>.html` ?**" |
-| Action toi | Tu valides ou demandes un ajustement |
-| Sortie | HTML (ou route Next.js) à jour, avec footer de traçabilité (voir §5) |
-| Trace | 1 ligne dans `CHANGELOG.md` |
-
-### Cérémonie D — Nouvelle version (versionning L1)
-
-| Acteur | Toi + IA |
-| --- | --- |
-| Trigger | Tu veux enrichir un L1 existant |
-| Choix | **Amendement** (nouveau fichier `-v2.md`) OU **patch ciblé** (édition surgicale d'une section nommée) |
-| Règle | **Ne JAMAIS écraser un V1.** Toujours créer `-v2.md`, `-v3.md`, etc., avec `based_on:` dans le frontmatter |
-| Sortie | Nouveau fichier `.md`, l'ancien reste intact |
-| Trace | 1 ligne dans `CHANGELOG.md` |
-
-> **Pourquoi versionner plutôt qu'écraser ?** Audit, apprentissage personnel,
-> et démonstration de la méthode (tu peux montrer "voilà ce que je pensais à
-> T0, voilà ce que j'ai appris à T1").
+Les mots de passe sont stockés en variables d'environnement Vercel : `EXTENDED_PASSWORD`, `EDITOR_PASSWORD`. En local : un fichier `.env.local` (gitignored).
 
 ---
 
-## 3. Convention de nommage
+## 4. Les 3 cérémonies
 
-### Projets
+### A — Capture (toi → `_inbox/`)
 
-`NN-slug` à la racine de chaque couche concernée.
+Dump vocal, transcription, fichier dans `_inbox/<NN-projet>/<sujet>.md`. Format libre. L'IA n'intervient pas.
 
-- `00-genese` — le projet meta (la naissance du système)
-- `01-`, `02-`, … — les vrais case studies, dans l'ordre où tu les attaques
+### B — Promotion `_inbox/` → `vault/` (automatique)
 
-### Fichiers dans une couche
+Tu déposes un brut dans `_inbox/NN-projet/`. L'IA :
 
-| Couche | Convention |
-| --- | --- |
-| L0 | `<sujet-libre>.md`, daté si besoin (`2026-05-17-note.md`) |
-| L1 | `<concept>.md`, `<concept>-v2.md` pour versions |
-| L2 | `<projet>.html` (puis `app/<projet>/page.tsx` avec Next.js) |
+1. Lit le brut.
+2. Si le frontmatter est déductible (titre, type, dates, tags inférables du contenu) → écrit **directement** dans `vault/<locale>/NN-projet/<slug>.md` avec frontmatter complet.
+3. Si une info manque (type ambigu, date floue, niveau de visibility incertain) → demande **avant** d'écrire.
+4. Ajoute une ligne dans `CHANGELOG.md`.
+
+Pas de "tu valides ?" systématique. La convention par défaut : inbox → vault est l'attendu. Tu vois le résultat, tu peux amender.
+
+### C — Passe transversale (à la demande)
+
+Périodiquement, tu demandes à l'IA : *"fais une passe sur tous mes case-studies actifs"*. Elle :
+
+- Lit l'ensemble des `.md` du vault.
+- Repère les passerelles manquantes (un thème évoqué dans un projet, oublié dans un autre).
+- Propose des **questions d'approfondissement** (pas de modification directe).
+
+C'est le moment où la cohérence narrative émerge.
 
 ---
 
-## 4. Frontmatter obligatoire en L1
+## 5. Convention de nommage
+
+| Niveau | Convention |
+| --- | --- |
+| Projets | `NN-slug` (ex. `00-genese`, `01-loupe`, `02-...`) |
+| Locale | code ISO (`fr`, `en`) sous `vault/` |
+| Fichiers | `<concept>.md` ; amendements distincts : `<concept>-v2.md` avec `based_on:` |
+| Inbox | `<sujet>.md`, daté si besoin (`2026-05-17-note.md`) |
+
+---
+
+## 6. Frontmatter L1 obligatoire
 
 ```yaml
 ---
-title: ""                       # phrase complète
-project: ""                     # slug projet, ex. 00-genese
-slug: ""                        # nom de fichier sans .md
-date_start: ""                  # YYYY-MM-DD
-date_end: ""                    # YYYY-MM-DD (peut être vide si vivant)
-type: ""                        # case-study | prd | reflexion | skill | vision | meta-method
-tags: []
-skills_demonstrated: []
-collaborators: []
-impact_summary: ""              # 1 phrase, chiffré si possible
-visibility: public | private | draft
-status: draft | active | amendment | archived
-sources: []                     # chemins L0 ou autres L1 d'où vient la matière
-based_on: ""                    # autre L1 si c'est une version
-preview: ""                     # chemin L2 si projection existe
+title: "Titre lisible (devient h1)"
+project: "00-genese"
+slug: "slug-stable"
+date_start: 2026-05-17
+date_end: 2026-05-17           # optionnel
+type: "case-study | prd | meta-method | note | skill | reflexion | offer"
+visibility: "public | extended | editor"
+status: "draft | active | validated | amendment | archived"
+tags: ["..."]
+impact_summary: "Une phrase qui capture l'impact ou l'enseignement."
+sources:
+  - "L0: _inbox/00-genese/<source>.md"
+based_on: "<slug du fichier parent si amendement>"   # optionnel
 ---
 ```
 
-> L'IA refuse d'écrire en `vault/` un fichier dont le frontmatter est
-> incomplet. Si elle voit du contenu sans frontmatter, elle propose d'abord
-> le frontmatter, te demande validation, puis écrit.
+L'IA refuse d'écrire dans `vault/` sans frontmatter complet. Si une clé manque : elle demande.
 
 ---
 
-## 5. Footer de traçabilité en L2
+## 7. Versioning : git, pas de dossier `old/`
 
-Tout fichier `site/<projet>.html` se termine par un encart **Provenance** :
+L'historique est dans `git log` / `git blame`. **Aucun dossier `old/` ou `archive/`.** Pour amender :
 
-```
-─────────────────────────────────────────────────────────────
-Provenance
-- Source L1 : vault/fr/00-genese/synthese-strategique.md (modif. 2026-05-17)
-- Source L1 : vault/fr/00-genese/synthese-strategique-v2.md (modif. 2026-05-17)
-- Généré le 2026-05-17
-─────────────────────────────────────────────────────────────
-```
-
-Plus tard avec Next.js, ce footer sera auto-généré à partir du frontmatter
-des fichiers consommés.
+- Édition en place + commit séparé = audit trail naturel.
+- Si l'amendement est conceptuellement distinct (cas de `synthese-strategique-v2.md`) → nouveau fichier, `based_on: "<parent-slug>"`, `status: "amendment"`.
 
 ---
 
-## 6. CHANGELOG.md — la trace écrite
+## 8. Maquettes factices pour la confidentialité
 
-Fichier racine, une ligne par transition, du plus récent au plus ancien :
+Quand un case-study évoque un client/entreprise sensible : l'IA peut générer des maquettes factices (SVG, HTML inline, capture synthétique) pour illustrer sans violer la confidentialité.
 
-```
-2026-05-17 · L2 · site/00-genese.html · projection des V1+V2 du PRD
-2026-05-17 · L1 · vault/fr/00-genese/methode-workflow.md · création du manuel
-2026-05-17 · L1 · vault/fr/00-genese/synthese-strategique-v2.md · amendement V2 du PRD
-2026-05-17 · L1 · vault/fr/00-genese/synthese-strategique.md · promotion L0→L1 du PRD initial
-2026-05-17 · L0 · _inbox/00-genese/conversation-3-ias.md · ingestion des 3 dialogues IA
-```
+**Mention obligatoire sous chaque maquette :**
 
-C'est l'historique humain du système, indépendant de git.
+> Maquette factice générée pour illustration — données et UI ne reproduisent pas la mission réelle.
 
 ---
 
-## 7. Checkpoints anti-perfectionnisme
+## 9. CHANGELOG.md
 
-Pour empêcher le système de tourner sur lui-même au lieu de produire :
+Une ligne par opération significative, du plus récent au plus ancien :
+
+```
+2026-05-18 · vault · vault/fr/01-loupe/loupe-case-study.md · ajout section limitations
+2026-05-18 · shell · refonte vault-first (Next.js + manifest automatique)
+```
+
+C'est la trace humaine, complémentaire à `git log`.
+
+---
+
+## 10. Checkpoints
 
 | Symptôme | Seuil | Action |
 | --- | ---: | --- |
-| L1 trop long | > 500 lignes | Split obligatoire, jamais réécrire |
-| L2 désynchro | > 7 jours sans propagation | IA signale au début de session |
-| L0 saturé | > 5 fichiers non promus | IA signale et propose un tri |
-| Backlog actif | revue obligatoire fin sprint 3 | Voir [`backlog.md`](../../../backlog.md) |
-| Nouvelle idée | si pas dans le sprint courant | Va dans `backlog.md`, pas dans le code |
+| Document trop long | > 800 lignes | Proposer un split |
+| Inbox saturé | > 5 fichiers non promus dans un `_inbox/<NN>/` | Signaler |
+| Projet en sommeil | > 1 mois sans commit sur un projet actif | Signaler |
+| Nouvelle idée hors scope | quoi qu'il arrive | Va dans `backlog.md`, pas dans le code |
 
 ---
 
-## 8. Ce que l'IA ne fait JAMAIS sans demander
+## 11. Ce que l'IA ne fait JAMAIS sans demander
 
-1. Écraser un `.md` existant dans `vault/`.
-2. Modifier un fichier `site/*.html` sans avoir d'abord montré le diff conceptuel dans le chat.
-3. Créer une nouvelle couche / un nouveau projet sans valider le nom avec toi.
-4. Supprimer une entrée du `backlog.md` (elle peut en ajouter, jamais en retirer).
-5. Promouvoir un L0 en L1 sans présenter d'abord le brouillon complet (frontmatter + sections) dans le chat.
+1. Écraser un `.md` du vault sans présenter d'abord le diff.
+2. Créer un nouveau dossier projet (`vault/<locale>/NN-projet/`) sans valider le nom.
+3. Modifier `app/`, `components/`, `lib/`, `scripts/` — **le shell est stable**. Si tu veux le faire évoluer : conversation explicite.
+4. Supprimer une entrée du `backlog.md`.
+5. Toucher `manifest.json` (auto-généré).
 
 ---
 
-## 9. Évolution de ce manuel
+## 12. Manifest
 
-Ce fichier est lui-même soumis à sa propre méthode :
+`manifest.json` à la racine est généré par `scripts/build-manifest.mjs` (hook `predev` / `prebuild`). Il scanne `vault/`, lit les frontmatter, construit l'arbre filtrable par visibility. **Gitignored.** Régénéré automatiquement à chaque `npm run dev` ou `npm run build` (donc aussi à chaque déploiement Vercel).
 
-- Pour le faire évoluer → créer `methode-workflow-v2.md` avec `based_on:`.
-- La règle Cursor `00-workflow-layers.mdc` est mise à jour **en miroir** quand
-  la version active du manuel change.
-- Tout changement passe par le `CHANGELOG.md`.
+---
 
-> **Méta** : la première vraie "preuve" que cette méthode tient, c'est
-> qu'elle soit capable de se faire évoluer elle-même selon ses propres
-> règles, sans tomber dans la boucle.
+## 13. Évolution de ce manuel
+
+Soumis à sa propre méthode :
+
+- Pour l'amender → édition en place ou nouveau fichier `methode-workflow-v2.md`.
+- La règle Cursor `00-workflow-layers.mdc` est mise à jour en miroir.
+- Tout changement passe par `CHANGELOG.md`.
+
+> **Méta** : la preuve que la méthode tient, c'est qu'elle peut se faire évoluer elle-même sans tomber dans la boucle.

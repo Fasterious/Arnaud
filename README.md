@@ -1,98 +1,59 @@
-# Arnaud — Système narratif personnel
+# Arnaud — système narratif
 
-> Un système de **compression narrative** qui transforme un parcours dispersé en
-> récit récupérable sous pression, et qui se manifeste sous forme de site.
+Portfolio / wiki personnel, **vault-first** : tu écris du markdown, un shell Next.js le projette automatiquement en site naviguable.
 
-## Méta — le premier projet documente le système lui-même
-
-Le projet fondateur s'appelle [`00-genese`](./vault/fr/00-genese/synthese-strategique.md).
-Il contient la conversation initiale avec 3 IA + la synthèse critique qui a
-donné naissance à l'architecture de ce repo. Le système se prouve par son
-existence : la méthode qu'il décrit est celle qui l'a produit.
-
-## Architecture en 3 couches
+## Architecture en 2 couches
 
 ```
-.
-├── _inbox/                  L0 — matière brute, jetable
-│   └── 00-genese/
-│       └── conversation-3-ias.md
-│
-├── vault/fr/                L1 — Markdown discipliné = le moteur
-│   └── 00-genese/
-│       └── synthese-strategique.md
-│
-├── site/                    L2 — projection publique (preview HTML)
-│   └── 00-genese.html
-│
-├── backlog.md               Idées hors-MVP, parquées avec date d'examen
-├── vercel.json              Routing : `/` et `/00-genese` → site/00-genese.html
-└── README.md                (ce fichier)
+_inbox/<NN-projet>/        ← brouillons, dumps vocaux, gitignored
+        ↓ promotion (auto si frontmatter déductible)
+vault/<locale>/<NN-projet>/<slug>.md   ← produit fini, frontmatter discipliné
+        ↓ projection (automatique, shell Next.js)
+   site naviguable (Vercel)
 ```
 
-| Couche | Audience | Format | Visibilité git |
-| --- | --- | --- | --- |
-| **L0** Inbox | Toi seul | Brut, vocal-transcrit, libre | Gitignored |
-| **L1** Vault | Toi + IA | Markdown + frontmatter discipliné | Privé (repo) |
-| **L2** Site | Public (recruteurs, pairs) | HTML curé (puis Next.js) | Publié |
+Tout ce qui entoure le markdown est minimal et stable. **L'intelligence va dans le contenu.**
 
-## Convention de nommage des projets
+## Visibilité — 3 modes
 
-Chaque projet a un dossier homonyme dans chacune des 3 couches concernées,
-pour que l'arborescence raconte d'elle-même la traçabilité L0 → L1 → L2.
+| Mode | Niveau | Voit |
+| --- | --- | --- |
+| Public | 0 | `visibility: public` (défaut) |
+| Étendu | 1 | + `extended` (projets sensibles, offres) |
+| Éditeur | 2 | + `editor` (règles, méta, skills) |
 
-Préfixe `NN-` pour ordonner :
-- `00-genese` — le bootstrap meta (existe)
-- `01-...`, `02-...` — les vrais case studies à venir
+Mots de passe en variables d'environnement Vercel (`EXTENDED_PASSWORD`, `EDITOR_PASSWORD`). Filtrage côté serveur.
 
-## Workflow d'un nouveau projet
+## Structure du repo
 
-1. **Capture (L0)** : dump vocal → transcription dans
-   `_inbox/<projet>/<note>.md`.
-2. **Structuration (L1)** : appliquer le [template de case
-   study](./vault/fr/00-genese/synthese-strategique.md#6-le-template-à-figer-cette-semaine)
-   → `vault/fr/<projet>/<sujet>.md`.
-3. **Publication (L2)** : la page sortie dans `site/` (HTML pour l'instant,
-   Next.js plus tard) consomme le `vault/`.
+```
+app/                          Shell Next.js (layout + page catch-all + auth)
+components/Shell.tsx          Sidebar arborescente + breadcrumb + auth bar
+lib/                          manifest.ts, auth.ts
+scripts/build-manifest.mjs    Scan vault → manifest.json
+vault/<locale>/<NN-projet>/   Le contenu — markdown discipliné
+_inbox/<NN-projet>/           Brouillons (gitignored)
+.cursor/rules/                Règle injectée à chaque session IA
+CHANGELOG.md                  Trace humaine des opérations
+backlog.md                    Idées hors scope
+```
 
-Le détail méthodologique (cible : 90 min par case study) est dans la
-[§ 8 de la synthèse](./vault/fr/00-genese/synthese-strategique.md#8-méthodologie-de-travail-au-quotidien).
+## Démarrer en local
 
-## Méthode & contrôle de la propagation
+```bash
+npm install
+cp .env.example .env.local   # remplir EXTENDED_PASSWORD et EDITOR_PASSWORD
+npm run dev                  # http://localhost:3000
+```
 
-L'IA ne propage **jamais** une couche à la suivante sans validation explicite.
+## Déployer
 
-- Manuel complet (humain) : [`vault/fr/00-genese/methode-workflow.md`](./vault/fr/00-genese/methode-workflow.md)
-- Règle Cursor (auto-appliquée à chaque session) : [`.cursor/rules/00-workflow-layers.mdc`](./.cursor/rules/00-workflow-layers.mdc)
-- Historique humain des transitions : [`CHANGELOG.md`](./CHANGELOG.md)
+Push sur `main`. Vercel régénère le manifest et déploie. Définir `EXTENDED_PASSWORD` et `EDITOR_PASSWORD` dans les variables d'env du projet Vercel.
 
-Les 4 cérémonies (Capture, Promotion L0→L1, Projection L1→L2, Nouvelle
-version), les checkpoints anti-perfectionnisme et le frontmatter obligatoire
-sont décrits dans le manuel.
+## Méthode complète
 
-## Stack cible
-
-- **Framework futur** : Next.js 15 (App Router) — bascule prévue après 2-3
-  case studies dans le vault.
-- **Hosting** : Vercel (déjà lié).
-- **Contenu** : MDX + Velite (types TS depuis frontmatter).
-- **Style** : Tailwind + shadcn/ui.
-- **Recherche** : Pagefind (statique).
-- **Traduction** : script CLI FR → EN (lit `vault/fr/`, écrit `vault/en/`).
-
-## État actuel
-
-| Sprint | Statut |
-| --- | --- |
-| Sprint 0 — Foundations (cette semaine) | En cours |
-| Sprint 1 — V1 statique en ligne | À venir |
-| Sprint 2 — EN + densité | À venir |
-| Sprint 3 — Backlog V2 examiné | À venir |
-
-Roadmap complète : [§ 5 de la synthèse](./vault/fr/00-genese/synthese-strategique.md#5-roadmap--4-sprints-de-2-semaines).
+Voir [`vault/fr/00-genese/methode-workflow.md`](vault/fr/00-genese/methode-workflow.md) (visible en mode éditeur). La règle Cursor [`.cursor/rules/00-workflow-layers.mdc`](.cursor/rules/00-workflow-layers.mdc) en est la version compacte injectée à chaque session IA.
 
 ## Indicateur unique de succès
 
-Dans 6 semaines, à la prochaine offre intéressante : URL envoyée avec
-confiance **et** premier call décroché ? Si oui, le système fonctionne. Si
-non, retour au tableau.
+Dans 6 semaines, à la prochaine offre intéressante : URL envoyée avec confiance **et** premier call décroché ? Si oui, le système fonctionne. Si non, retour au tableau.

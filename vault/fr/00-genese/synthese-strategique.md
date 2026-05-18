@@ -24,8 +24,6 @@ sources:
 preview: ../../../site/00-genese.html
 ---
 
-# Projet « Arnaud » — Synthèse stratégique
-
 Analyse croisée des 3 IA, lecture critique, et approche unifiée. Le projet
 n'est pas un site : c'est un **système de compression narrative** qui se
 manifeste sous forme de site.

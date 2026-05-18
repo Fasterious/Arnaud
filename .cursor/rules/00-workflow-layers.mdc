@@ -1,47 +1,85 @@
 ---
-description: Architecture L0→L1→L2 et workflow de propagation contrôlée du système narratif Arnaud.
+description: Architecture vault-first du projet Arnaud — propagation, visibilité, discipline IA.
 alwaysApply: true
 ---
 
-# Workflow L0 → L1 → L2 (système narratif Arnaud)
+# Workflow vault-first (système narratif Arnaud)
 
-Manuel complet, lisible et versionné : `vault/fr/00-genese/methode-workflow.md`.
-Y revenir avant toute modification structurelle.
+Manuel complet versionné : `vault/fr/00-genese/methode-workflow.md`. Y revenir avant toute modification structurelle.
 
-## Architecture (rappel)
+## Architecture en 2 couches
 
-| Couche | Dossier | Audience | Format |
-| --- | --- | --- | --- |
-| L0 Inbox | `_inbox/<projet>/` | toi seul | dump brut, jetable, **gitignored** |
-| L1 Vault | `vault/fr/<projet>/` | toi + IA | Markdown + frontmatter discipliné |
-| L2 Site | `site/` (puis `app/`) | public | projection curée (HTML / Next.js) |
+| Couche | Dossier | Statut | Audience | Format |
+| --- | --- | --- | --- | --- |
+| L0 — Inbox | `_inbox/<NN-projet>/` | brouillon, **gitignored** | toi seul | markdown libre, transcriptions vocales |
+| L1 — Vault | `vault/<locale>/<NN-projet>/` | **produit fini** | toi + visiteurs (selon `visibility`) | markdown discipliné + frontmatter |
 
-Tout projet a un dossier homonyme dans chacune des couches qu'il atteint (ex. `00-genese`).
+**Plus de couche L2 HTML manuelle.** Le shell Next.js (`app/`) projette automatiquement les `.md` du vault en site naviguable. Tu écris du markdown, le site se met à jour au prochain `git push`.
 
-## Règle d'or — pas de propagation silencieuse
+## Visibility (frontmatter) — 3 niveaux
 
-Une couche n'est jamais écrite sans **validation explicite de l'utilisateur** sur la précédente.
+| `visibility:` | Visible en mode | Cas d'usage |
+| --- | --- | --- |
+| `public` (défaut) | Tous | Case studies, contenu de portfolio |
+| `extended` | Étendu (mdp 1) | Projets sensibles, brouillons avancés, offres tracées |
+| `editor` | Éditeur (mdp 2) | Règles, méthode, méta-réflexion, skills internes |
 
-1. **L0 → L1.** Présenter un brouillon dans le chat. Demander "OK pour écrire dans `vault/` ?". N'écrire qu'après confirmation.
-2. **L1 → L2.** Détecter le décalage. Proposer le diff conceptuel (sections ajoutées, modifiées). Demander confirmation. N'écrire dans `site/` qu'ensuite.
-3. **Nouvelle version.** Ne JAMAIS écraser. Créer `<slug>-v2.md`, `<slug>-v3.md`. Lier via `based_on:` dans le frontmatter.
+Filtrage côté serveur : page renvoie 404 + arbre filtré. Pas de simple masquage UI.
 
 ## Frontmatter L1 obligatoire
 
-`project`, `sources` (liste L0), `preview` (L2), `based_on` (L1 précédent si version), `status` (draft | active | amendment | archived). L'IA refuse d'écrire en `vault/` sans ces champs.
+```yaml
+---
+title: "Titre lisible (devient h1)"
+project: "NN-projet"
+slug: "slug-stable"
+date_start: YYYY-MM-DD
+date_end: YYYY-MM-DD   # optionnel
+type: "case-study | prd | meta-method | note | skill | reflexion | offer"
+visibility: "public | extended | editor"
+status: "draft | active | validated | amendment | archived"
+tags: ["..."]
+impact_summary: "Une phrase qui capture l'impact ou l'enseignement"
+sources:
+  - "L0: _inbox/NN-projet/<source>.md"
+based_on: "<slug du fichier parent si amendement>"
+---
+```
 
-## Traçabilité
+L'IA refuse d'écrire un `.md` dans `vault/` sans frontmatter complet. Si une clé manque, elle demande avant d'écrire.
 
-- Chaque L2 affiche un footer **Provenance** listant les L1 consommés.
-- `CHANGELOG.md` racine : 1 ligne par transition, format `YYYY-MM-DD · <couche> · <chemin> · <résumé>`.
+## Auto-génération depuis l'inbox
 
-## Checkpoints anti-perfectionnisme
+Quand l'utilisateur dépose un brut dans `_inbox/NN-projet/`, l'IA génère **directement** le `.md` dans `vault/<locale>/NN-projet/`, sans repasser par le chat — à condition que le frontmatter soit déductible (sinon : poser les questions manquantes), et qu'une entrée `CHANGELOG.md` soit ajoutée dans le même commit. Pas de "veux-tu que je crée le fichier ?" — la convention est : inbox → vault est l'attendu.
 
-- L1 > 500 lignes → split, jamais réécrire.
-- L2 désynchronisé > 7 jours → signaler en début de session.
-- > 5 fichiers L0 non promus → signaler.
-- Nouveau besoin "hors MVP" → `backlog.md`, pas le code.
+## Versioning — Git, pas de dossier `old/`
 
-## Interdits sans demander
+L'historique des `.md` est dans `git log` / `git blame`. **Ne pas créer de `old/`, `archive/`, ou dupliquer des fichiers v1/v2** comme stratégie de versioning. Pour amender :
+- Préfère éditer en place (commit séparé = audit trail).
+- Si l'amendement est conceptuellement distinct (cf. `synthese-strategique-v2.md`), crée un nouveau fichier avec `based_on: "<parent-slug>"` et `status: "amendment"`.
 
-Écraser un `.md` du vault · modifier `site/*.html` sans diff préalable · créer un projet/couche sans valider le nom · retirer une entrée du `backlog.md`.
+## Maquettes factices pour la confidentialité
+
+Quand un case-study touche un client/entreprise sensible : l'IA peut générer des maquettes factices (image, SVG, HTML inline) pour illustrer le propos. **Mention obligatoire** sous la maquette : `> Maquette factice générée pour illustration — données et UI ne reproduisent pas la mission réelle.`
+
+## Manifest
+
+`manifest.json` à la racine est **auto-généré** par `scripts/build-manifest.mjs` (hook `predev` / `prebuild`). Gitignored. Ne pas l'éditer.
+
+## Interdictions sans validation explicite
+
+- Écrire/écraser un `.md` dans `vault/` sans frontmatter complet.
+- Créer un nouveau dossier projet (`vault/<locale>/NN-projet/`) sans accord.
+- Modifier `app/`, `components/`, `lib/`, `scripts/` (le shell est stable, l'intelligence doit aller dans le markdown).
+- Supprimer une entrée du `backlog.md`.
+- Toucher à `manifest.json` à la main.
+
+## Checkpoints
+
+- Document L1 > 800 lignes → proposer un split.
+- Plus de 5 fichiers non promus dans un `_inbox/<NN>/` → signaler.
+- Plus d'un mois sans commit sur un projet actif → signaler.
+
+## Passes transversales
+
+À la demande : l'IA lit tous les case-studies actifs, repère les passerelles manquantes (un thème évoqué dans un projet mais oublié dans un autre), et propose des **questions d'approfondissement**, jamais des modifications directes.

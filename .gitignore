@@ -1,4 +1,9 @@
 .DS_Store
 .vercel
 _inbox/
-
+node_modules/
+.next/
+next-env.d.ts
+manifest.json
+.env*.local
+.claude/settings.local.json
