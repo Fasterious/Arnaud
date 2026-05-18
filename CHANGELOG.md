@@ -1,9 +1,16 @@
 # CHANGELOG — Système narratif Arnaud
 
-Trace humaine, indépendante de git, de chaque transition entre couches.
-Format : `YYYY-MM-DD · <couche> · <chemin> · <résumé en 1 ligne>`.
+Trace humaine, indépendante de git, de chaque opération significative.
+Format : `YYYY-MM-DD · <zone> · <chemin> · <résumé en 1 ligne>`.
 
 Plus récent en haut.
+
+## 2026-05-18
+
+- shell · refonte vault-first : suppression de la couche L2 manuelle (`site/*.html` + `vercel.json`), shell Next.js 15 unique qui projette le vault automatiquement (`app/`, `components/Shell.tsx`, `lib/manifest.ts`, `lib/auth.ts`, `scripts/build-manifest.mjs`)
+- auth · 3 niveaux (public / extended / editor) via cookie + variables d'env `EXTENDED_PASSWORD`, `EDITOR_PASSWORD` ; filtrage côté serveur
+- vault · `vault/fr/00-genese/methode-workflow.md` · réécriture vault-first ; passage en `visibility: editor`
+- cursor · `.cursor/rules/00-workflow-layers.mdc` · réécriture miroir de la nouvelle méthode
 
 ## 2026-05-17
 

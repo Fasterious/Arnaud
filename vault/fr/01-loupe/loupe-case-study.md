@@ -26,8 +26,6 @@ based_on:
 preview: 
 ---
 
-# Loupe — concevoir un lecteur d'entraînement pour musiciens, seul, en 24 jours
-
 > Première fois que je tiens **toutes les casquettes d'un produit** : recherche, design, dev, audio, mobile, marketing, analytics, release. 24 jours du premier commit à la bêta Play Store. Ce case study raconte la méthode, pas le produit.
 
 ---

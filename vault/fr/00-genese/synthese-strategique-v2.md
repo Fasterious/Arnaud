@@ -22,8 +22,6 @@ status: amendment
 preview: ../../../site/00-genese.html
 ---
 
-# PRD V2 — Enrichissements
-
 > Ce document **ne remplace pas** [V1](./synthese-strategique.md). Il l'enrichit
 > sur 8 angles laissés en blanc ou seulement effleurés.
 
