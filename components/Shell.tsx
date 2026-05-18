@@ -46,7 +46,8 @@ function Tree({ nodes, currentSlug }: { nodes: TreeNode[]; currentSlug: string }
 }
 
 function TreeFolder({ node, currentSlug }: { node: FolderNode; currentSlug: string }) {
-  const [open, setOpen] = useState<boolean>(true);
+  const inPath = currentSlug === node.slug || currentSlug.startsWith(node.slug + "/");
+  const [open, setOpen] = useState<boolean>(inPath);
   return (
     <li>
       <div className="node" onClick={() => setOpen(!open)}>

@@ -22,6 +22,7 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -114,6 +115,9 @@ a:hover { text-decoration: underline; }
   padding: 32px 48px 80px;
   max-width: 860px;
   width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* ---------- Tree nav ---------- */
@@ -136,7 +140,7 @@ a:hover { text-decoration: underline; }
 .tree .node.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
 .tree .node .chev { width: 12px; opacity: 0.5; font-size: 10px; }
 .tree .node .icon { font-size: 11px; opacity: 0.6; }
-.tree .node .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tree .node .label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tree .node .vis {
   font-size: 9px;
   padding: 1px 5px;
@@ -252,6 +256,7 @@ a:hover { text-decoration: underline; }
   padding: 24px;
   border-radius: var(--radius);
   width: 320px;
+  max-width: calc(100vw - 32px);
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 .login h3 { margin: 0 0 12px; font-size: 16px; }
@@ -283,5 +288,10 @@ a:hover { text-decoration: underline; }
 @media (max-width: 720px) {
   .shell { grid-template-columns: 1fr; }
   .sidebar { position: relative; height: auto; max-height: 40vh; }
-  .content { padding: 20px; }
+  .content { padding: 20px 16px 60px; }
+  .topbar { padding: 10px 16px; gap: 12px; flex-wrap: wrap; }
+  .breadcrumb { min-width: 0; flex: 1; }
+  .auth-bar { flex-shrink: 0; }
+  .article header.meta h1 { font-size: 26px; }
+  .home h1 { font-size: 28px; }
 }
